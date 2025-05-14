@@ -133,7 +133,8 @@ with sync_playwright() as p:
         except:
             excelSheetFrame.iloc[serialNumbers.index(checkedInSerial), 1] = "Email, IC"
     page2.wait_for_timeout(3000) #adding extra time just to make sure the last email sends
-    check_outlook(checkedInStudents[len(checkedInStudents)-1]) #check for the last email in sent folder
+    if(len(checkedInStudents) > 0):
+        check_outlook(checkedInStudents[len(checkedInStudents)-1]) #check for the last email in sent folder
 
     page3.bring_to_front()
     for checkedInSerial in checkedInSerials:
