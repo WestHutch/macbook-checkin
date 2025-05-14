@@ -4,7 +4,7 @@ Upon first running the program, you will be prompted to enter your credentials f
 
 To run this program...
   1. Ensure python is installed on your machine
-  2. Download this repo and save it to your desktop
+  2. Download this repo to your desktop, and unzip it
   3. In the checkin_sheet Excel doc, fill the Serial colum
   4. In the command prompt, naviate to where you have this repo saved
      
