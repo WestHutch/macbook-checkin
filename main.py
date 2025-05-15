@@ -53,8 +53,9 @@ def complete_outlook(studentNumber, sn):
     #fill in body
     page2.get_by_placeholder("Add a subject").fill(f"{studentNumber} Returned Device")
     page2.get_by_label("Message body, press Alt+F10").fill(f"You turned in device {sn}\n\n~Turner Tech Team\n\n")
-    page2.locator("button").filter(has_text="Send").click()
-    #page2.keyboard.press("Control+Enter")
+    #page2.locator("button").filter(has_text="Send").click()
+    page2.wait_for_timeout(1000)
+    page2.keyboard.press("Control+Enter")
 
 def check_outlook(studentNumber):
     try:
