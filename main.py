@@ -70,7 +70,7 @@ def login_ic():
     page3.fill('#username', user_credentials[0])
     page3.fill('#password', user_credentials[1])
     page3.click('#signinbtn')
-    page3.get_by_label("Search").hover() #this is here so that IC stays focused until you enter your SSO key
+    page3.get_by_label("Search").first.hover() #this is here so that IC stays focused until you enter your SSO key
 
 def complete_ic(studentNumber):
     def open_student_page(attempts):
@@ -78,10 +78,10 @@ def complete_ic(studentNumber):
             page3.get_by_text("#" + studentNumber).click(timeout=2000)
         except:
             attempts += 1
-            page3.get_by_label("Search").click()
+            page3.get_by_label("Search").first.click()
             if attempts < 5:
                 open_student_page(attempts)
-    page3.get_by_label("Search").click()
+    page3.get_by_label("Search").first.click()
     page3.get_by_placeholder("Student Search...").fill(studentNumber)
     page3.get_by_placeholder("Student Search...").press("Enter")
     #for some reason search minimizes here, needs to be open in order to see next button to click
