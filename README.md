@@ -3,7 +3,19 @@
 > 
 > ⚠️ Internal tool only: This is designed for use by THS/TMS technicians only.
 > 
-This script automates bulk device check-in tasks. You paste serial numbers into an Excel sheet, and the script uses Playwright to handle browser workflows like checking in devices, updating student records, and sending email notifications. It significantly speeds up the check-in process. If a check-in fails, the script logs a description of the error in the second column of the spreadsheet.
+
+## Overview
+
+This script automates bulk device check-in tasks. You paste serial numbers into an Excel sheet, and the script uses Playwright to handle browser workflows like checking in devices, updating student records, and sending email notifications. If a check-in fails, the script logs a description of the error in the second column of the spreadsheet.
+
+### Efficiency
+
+| Task | Estimated Time |
+|---|---:|
+| Manual setup (50 devices) | ~50 min |
+| Automated with this script | ~6 min |
+
+**Estimated Time saved:** ~44 minutes (~88% faster)
 
 ## Demo
 
