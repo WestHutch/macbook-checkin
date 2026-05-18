@@ -17,6 +17,8 @@ This script automates bulk device check-in tasks. You paste serial numbers into 
 
 **Estimated Time saved:** ~44 minutes (~88% faster)
 
+At district scale, this can save several technician-hours during large check-in events.
+
 ## Demo
 
 ![Screenshot](./screenshots/full_run.gif)
