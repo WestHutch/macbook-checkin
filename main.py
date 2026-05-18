@@ -37,7 +37,7 @@ def complete_destiny(serialNum, page1, checkedInStudents):
     #the following will throw an error if the device wasnt checked in
     if len(checkedInStudents) != 0: #check if theres any students added to the array yet, without this next line would error out on the first one
         if retrievedNumber == checkedInStudents[len(checkedInStudents)-1]: #if it accidentally grabbed the previous checkin student num...
-            page1.wait_for_timeout(3000)
+            page1.wait_for_timeout(1000)
             retrievedNumber = str(page1.locator('[id="Library Manager"]').content_frame.locator("#transactionList > tbody > tr:nth-child(3) > td:nth-child(2) > span.SmallColRow > a").inner_text())
             if retrievedNumber == checkedInStudents[len(checkedInStudents)-1]:
                 raise Exception("Destiny")
@@ -65,14 +65,23 @@ def login_outlook(page2, user_credentials):
 def complete_outlook(studentNumber, sn, page2):
     page2.wait_for_timeout(1000)
     page2.get_by_role("button", name="New mail").first.click()
-    page2.wait_for_timeout(3000) #bad practice, but it lets you type before the element is accepting text
+    page2.wait_for_timeout(1000) #bad practice, but it lets you type before the element is accepting text
     #add addresses to the to field
     page2.get_by_label("To", exact=True).press_sequentially(studentNumber)
-    page2.locator("#FloatingSuggestionsItemId0").filter(has_text=studentNumber).click(timeout=10000)
+    try:
+        page2.locator("#FloatingSuggestionsItemId0").filter(has_text=studentNumber).click(timeout=3000)
+    except:
+        try:
+            page2.locator("#FloatingSuggestionsItemId0").first.click(timeout=3000)
+        except:
+            page2.get_by_label("Discard", exact=True).click()
+            page2.get_by_text("OK", exact=True).click()
+            #page2.locator('[role="dialog"]').get_by_role("button", name="OK").click()
+            raise Exception("Not found in Outlook suggestions")
     #fill in body
     page2.get_by_placeholder("Add a subject").fill(f"{studentNumber} Returned Device")
     page2.get_by_label("Message body", exact=True).fill(f"You turned in device {sn}\n\n~Turner Tech Team\n\n")
-    page2.wait_for_timeout(2000)
+    page2.wait_for_timeout(1000)
     page2.keyboard.press("Control+Enter")
 
 def check_outlook(studentNumber, page2, excelSheetFrame, serialNumbers, checkedInSerials):
