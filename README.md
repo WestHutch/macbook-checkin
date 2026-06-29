@@ -79,14 +79,6 @@ To reset sensitive information (usernames/passwords), use the `--reset-credentia
 py main.py --reset-credentials
 ```
 
-To reset your school choice, use `--reset-school-info`.
-
-```
-py main.py --reset-school-info
-```
-
-Alternatively, you can edit this in the `schoolinfo.json` file.
-
 ## Troubleshooting
 ### pip not recognized as a command
 If pip is not being recognized as a command, you may need to add a couple paths to your system's PATH environment variable  

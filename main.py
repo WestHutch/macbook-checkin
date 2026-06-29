@@ -1,15 +1,17 @@
 from playwright.sync_api import sync_playwright
-from credentials import get_user_info, set_credentials, write_school_info
+from credentials import get_user_info, set_credentials
 import pandas as pd
 from datetime import date
 import argparse
 
-def login_destiny(page1, user_credentials):
+def login_destiny(page1, user_credentials, school):
     page1.goto('https://turnerusd202.follettdestiny.com', timeout=180000)
-    if user_credentials["school"] == "m":
+    if school == "m":
         page1.get_by_text("Turner Middle School").click(timeout=180000)
-    else:
+    elif school == "h":
         page1.get_by_text("Turner High School").click(timeout=180000)
+    else:
+        page1.get_by_text("Turner Sixth Grade Academy").click(timeout=180000)
 
     page1.click('#toolbar-guest-login-btn', timeout=180000)
     page1.fill('#userName', user_credentials["destiny_user"])
@@ -124,17 +126,18 @@ def complete_ic(studentNumber, page3, todaysDate):
 def main():
     parser = argparse.ArgumentParser(description="Broken device script")
     parser.add_argument("--reset-credentials", action="store_true", dest="reset_credentials", help="Reset stored credentials before running")
-    parser.add_argument("--reset-school-info", action="store_true", dest="reset_school_info", help="Reset stored school information before running")
     args = parser.parse_args()
 
     if args.reset_credentials:
         set_credentials()
     
-    if args.reset_school_info:
-        write_school_info()
-
-
     user_credentials = get_user_info()
+
+    school = ""
+    while school.lower() != "h" and school.lower() != "m" and school.lower() != "s":
+        school = input("Enter m for TMS, h for THS, or s for TSGA: ")
+    school = school.lower()
+
     excelSheetFrame = pd.read_excel('checkin_sheet.xlsx')
     excelSheetFrame = excelSheetFrame.astype(str) #convert the data to strings, will make empty cells "NaN"
     serialNumbers = excelSheetFrame['Serial'].tolist()
@@ -157,7 +160,7 @@ def main():
         login_ic(page3, user_credentials)
 
         page1.bring_to_front()
-        login_destiny(page1, user_credentials)
+        login_destiny(page1, user_credentials, school)
         for serialNumber in serialNumbers:
             try:
                 studentNum = complete_destiny(serialNumber, page1, checkedInStudents)

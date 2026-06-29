@@ -45,36 +45,10 @@ def get_credentials():
         raise ValueError("Incomplete userCredentials, please run with --reset-credentials arg")
     return(userCredentials)
 
-
-def write_school_info():
-    school = ""
-    while school != "h" and school != "m":
-        school = input("Enter m for TMS or h for THS: ")
-
-    schoolInfo = {
-        "school": school
-    }
-
-    with open("schoolinfo.json", "w") as f:
-        json.dump(schoolInfo, f, indent=4)
-    return(schoolInfo)
-
-def read_school_info():
-    with open("schoolinfo.json", "r") as f:
-        schoolInfo = json.load(f)
-    return(schoolInfo)
-
 def get_user_info():
     try:
         userCredentials = get_credentials()
     except ValueError:
         userCredentials = set_credentials()
 
-    try:
-        schoolInfo = read_school_info()
-    except (FileNotFoundError, json.JSONDecodeError):
-        schoolInfo = write_school_info()
-
-    userDict = userCredentials | schoolInfo
-
-    return(userDict)
+    return(userCredentials)
