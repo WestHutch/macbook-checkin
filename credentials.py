@@ -1,5 +1,4 @@
 import keyring
-import json
 import getpass
 
 def set_credentials():

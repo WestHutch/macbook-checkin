@@ -101,7 +101,7 @@ def login_ic(page3, user_credentials):
     page3.click('#signinbtn')
     page3.get_by_label("Search").first.hover() #this is here so that IC stays focused until you enter your SSO key
 
-def complete_ic(studentNumber, page3, todaysDate):
+def complete_ic(studentNumber, page3, todaysDate, season):
     def open_student_page(attempts):
         try:
             page3.get_by_placeholder("Student Search...").fill(studentNumber, timeout=2000)
@@ -118,7 +118,10 @@ def complete_ic(studentNumber, page3, todaysDate):
     #for some reason search minimizes here, needs to be open in order to see next button to click
     open_student_page(0)
     page3.get_by_role("link", name="Student Technology").click()
-    page3.frame_locator("iframe[title=\"workspace\"]").frame_locator("iframe[name=\"frameWorkspace\"]").frame_locator("iframe[name=\"frameWorkspaceWrapper\"]").frame_locator("iframe[name=\"frameWorkspaceDetail\"]").get_by_role("textbox", name="Return Date").fill(f"{todaysDate}")
+    if season == "s":
+        page3.frame_locator("iframe[title=\"workspace\"]").frame_locator("iframe[name=\"frameWorkspace\"]").frame_locator("iframe[name=\"frameWorkspaceWrapper\"]").frame_locator("iframe[name=\"frameWorkspaceDetail\"]").get_by_role("textbox", name="SS Return").fill(f"{todaysDate}")
+    else:
+        page3.frame_locator("iframe[title=\"workspace\"]").frame_locator("iframe[name=\"frameWorkspace\"]").frame_locator("iframe[name=\"frameWorkspaceWrapper\"]").frame_locator("iframe[name=\"frameWorkspaceDetail\"]").get_by_role("textbox", name="Return Date").fill(f"{todaysDate}")
     page3.frame_locator("iframe[title=\"workspace\"]").frame_locator("iframe[name=\"frameWorkspace\"]").frame_locator("iframe[name=\"frameWorkspaceWrapper\"]").frame_locator("iframe[name=\"frameWorkspaceHeader\"]").get_by_role("link", name="Save").click()
     #ensure it saves
     page3.frame_locator("iframe[title=\"workspace\"]").frame_locator("iframe[name=\"frameWorkspace\"]").frame_locator("iframe[name=\"frameWorkspaceWrapper\"]").frame_locator("iframe[name=\"frameWorkspaceDetail\"]").get_by_role("textbox", name="Student Password").click()
@@ -136,7 +139,12 @@ def main():
     school = ""
     while school.lower() != "h" and school.lower() != "m" and school.lower() != "s":
         school = input("Enter m for TMS, h for THS, or s for TSGA: ")
-    school = school.lower()
+        school = school.lower()
+
+    season = "x"
+    while season.lower() != "s" and season != "":
+        season = input("Enter s for summer school, or press enter for a normal school year: ")
+        season = season.lower()
 
     excelSheetFrame = pd.read_excel('checkin_sheet.xlsx')
     excelSheetFrame = excelSheetFrame.astype(str) #convert the data to strings, will make empty cells "NaN"
@@ -185,7 +193,7 @@ def main():
         for checkedInSerial in checkedInSerials:
             try:
                 matchingStudent = checkedInStudents[checkedInSerials.index(checkedInSerial)]
-                complete_ic(matchingStudent, page3, todaysDate)
+                complete_ic(matchingStudent, page3, todaysDate, season)
             except:
                 excelSheetFrame.iloc[serialNumbers.index(checkedInSerial), 1] = "IC"
         page3.wait_for_timeout(3000)
